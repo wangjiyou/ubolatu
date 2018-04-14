@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 	"os"
 
@@ -11,6 +12,7 @@ import (
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	httptransport "github.com/go-kit/kit/transport/http"
 
+	"ubolatu/config"
 	"ubolatu/db"
 	"ubolatu/test"
 	"ubolatu/userinfo"
@@ -18,6 +20,13 @@ import (
 
 func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
+
+	var configPtr = flag.String("c", "config/config.json", "Config file path, if ignored will be load from ./config/config.json")
+	err := config.LoadConfigFile(*configPtr)
+	if err != nil {
+		logger.Log("config.LoadConfigFile err:", err)
+		return
+	}
 
 	fieldKeys := []string{"method", "error"}
 	requestCount := kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{

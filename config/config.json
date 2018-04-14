@@ -1,0 +1,17 @@
+{
+        "GetGroups": "http://106.2.1.67/cdnapi/strategy/get",
+        "SentResult": "http://106.2.1.67/cdnapi/strategy/callback",
+        "Beat":60,
+        "UserName":"root",
+        "Password":"ying",
+        "IPAddress":"127.0.0.1",
+        "PortAddress":"3306",
+		"DBName":"center",
+		"AlarmUrl":"http://127.0.0.1:8090/",
+		"StatusChangeRatio":0.3,
+		"ReportedRatioPeriod":30,
+		"HttpTimeout":5,
+		"SecretKey":"nimeimei",
+		"AccessKey":"nidaye"
+}
+
