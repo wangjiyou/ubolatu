@@ -61,7 +61,7 @@ func UdecodeUserInfoRequest(_ context.Context, r *http.Request) (interface{}, er
 func OnLoginEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(LoginRequest)
-		v, _ := svc.OnLogin(req.Code)
+		v, _ := svc.OnLogin(req)
 		return UserResponse{v, 200}, nil
 	}
 }

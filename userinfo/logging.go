@@ -26,7 +26,7 @@ func (mw UloggingMiddleware) SetUserInfo(s string) (output string, err error) {
 	return
 }
 
-func (mw UloggingMiddleware) OnLogin(s string) (output string, err error) {
+func (mw UloggingMiddleware) OnLogin(s LoginRequest) (output string, err error) {
 	defer func(begin time.Time) {
 		_ = mw.Logger.Log(
 			"method", "uppercase",

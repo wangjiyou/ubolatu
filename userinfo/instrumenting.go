@@ -25,7 +25,7 @@ func (mw UinstrumentingMiddleware) SetUserInfo(s string) (output string, err err
 	return
 }
 
-func (mw UinstrumentingMiddleware) OnLogin(s string) (output string, err error) {
+func (mw UinstrumentingMiddleware) OnLogin(s LoginRequest) (output string, err error) {
 	defer func(begin time.Time) {
 		lvs := []string{"method", "uppercase", "error", fmt.Sprint(err != nil)}
 		mw.RequestCount.With(lvs...).Add(1)

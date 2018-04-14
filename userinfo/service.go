@@ -10,7 +10,7 @@ import (
 type StringService interface {
 	SetUserInfo(string) (string, error)
 	Count(string) int
-	OnLogin(string) (string, error)
+	OnLogin(LoginRequest) (string, error)
 }
 
 type UstringService struct{}
@@ -23,9 +23,10 @@ func (UstringService) SetUserInfo(s string) (string, error) {
 	return strings.ToUpper(s), nil
 }
 
-func (UstringService) OnLogin(s string) (string, error) {
-	fmt.Println("onlogin:", s)
-	return s, nil
+func (UstringService) OnLogin(request LoginRequest) (string, error) {
+	fmt.Println("onlogin:", request.Code)
+	//v := url.Values{}
+	return request.Code, nil
 }
 
 func (UstringService) Count(s string) int {

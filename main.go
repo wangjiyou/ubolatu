@@ -11,6 +11,7 @@ import (
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	httptransport "github.com/go-kit/kit/transport/http"
 
+	"ubolatu/db"
 	"ubolatu/test"
 	"ubolatu/userinfo"
 )
@@ -77,6 +78,7 @@ func main() {
 		userinfo.OnLoginRequest,
 		userinfo.UencodeResponse,
 	)
+	db.InitMysql()
 
 	http.Handle("/u-setuserinfo", u_setuserinfoHandler)
 	http.Handle("/onLogin", u_loginHandler)
