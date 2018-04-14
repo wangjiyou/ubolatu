@@ -4,13 +4,15 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+
+	"ubolatu/pub"
 )
 
 // StringService provides operations on strings.
 type StringService interface {
 	SetUserInfo(string) (string, error)
 	Count(string) int
-	OnLogin(LoginRequest) (string, error)
+	OnLogin(pub.LoginRequest) (string, error)
 }
 
 type UstringService struct{}
@@ -23,7 +25,7 @@ func (UstringService) SetUserInfo(s string) (string, error) {
 	return strings.ToUpper(s), nil
 }
 
-func (UstringService) OnLogin(request LoginRequest) (string, error) {
+func (UstringService) OnLogin(request pub.LoginRequest) (string, error) {
 	fmt.Println("onlogin:", request.Code)
 	//v := url.Values{}
 	return request.Code, nil

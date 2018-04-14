@@ -6,32 +6,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"ubolatu/pub"
+
 	"github.com/go-kit/kit/endpoint"
 )
-
-type UserInfoRequest struct {
-	OpenID          string `json:"openId"`
-	NickName        string `json:"nickName"`
-	Gender          string `json:"gender"`
-	City            string `json:"city"`
-	Province        string `json:"province"`
-	Country         string `json:"country"`
-	AvatarURL       string `json:"avatarUrl"`
-	UnionID         string `json:"unionId"`
-	PhoneNumber     string `json:"phoneNumber"`
-	PurePhoneNumber string `json:"purePhoneNumber"`
-	CountryCode     string `json:"countryCode"`
-	Timestamp       string `json:"timestamp"`
-}
-
-type UserResponse struct {
-	Data       string `json:"data"`
-	StatusCode int    `json:"statusCode"`
-}
-
-type LoginRequest struct {
-	Code string `json:"code"`
-}
 
 const (
 	//LoginWeiXinServerUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code"
@@ -40,18 +18,18 @@ const (
 
 func SetUserInfoEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(UserInfoRequest)
+		req := request.(pub.UserInfoRequest)
 		fmt.Println("SetUserInfoEndpoint:", req)
 		v, err := svc.SetUserInfo(req.NickName)
 		if err != nil {
-			return UserResponse{v, 500}, nil
+			return pub.UserResponse{v, 500}, nil
 		}
-		return UserResponse{v, 200}, nil
+		return pub.UserResponse{v, 200}, nil
 	}
 }
 
 func UdecodeUserInfoRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var request UserInfoRequest
+	var request pub.UserInfoRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
 	}
@@ -60,14 +38,14 @@ func UdecodeUserInfoRequest(_ context.Context, r *http.Request) (interface{}, er
 
 func OnLoginEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(LoginRequest)
+		req := request.(pub.LoginRequest)
 		v, _ := svc.OnLogin(req)
-		return UserResponse{v, 200}, nil
+		return pub.UserResponse{v, 200}, nil
 	}
 }
 
 func OnLoginRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var request LoginRequest
+	var request pub.LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
 	}
