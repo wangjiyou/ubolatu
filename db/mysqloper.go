@@ -63,5 +63,22 @@ func InitMysql() {
 		results = append(results, result)
 	}
 	fmt.Println("result:", results)
+	UpdateDelete()
+}
+
+func UpdateDelete() {
+	err := orm.Model(UserInfo{}).Where(&UserInfo{NickName: "wangjiyou"}).Update("NickName", "hahah").Error
+	if err != nil {
+		fmt.Println("Unxpected error on conditional update err:", err)
+		return
+	}
+	fmt.Println("Update OK")
+
+	err = orm.Where(UserInfo{NickName: "hahah"}).Delete(&UserInfo{}).Error
+	if err != nil {
+		fmt.Println("Unexpected error on conditional delete")
+		return
+	}
+	fmt.Println("Delete OK")
 
 }
