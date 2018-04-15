@@ -1,38 +1,56 @@
 package userinfo
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strings"
 
 	"github.com/xlstudio/wxbizdatacrypt"
 
 	"ubolatu/client"
+	//"ubolatu/db"
 	"ubolatu/pub"
 )
 
+type LoginSession struct {
+	Openid     string `json:"openid"`
+	SessionKey string `json:"session_key"`
+	Unionid    string `json:"unionid"`
+}
+
 // StringService provides operations on strings.
 type StringService interface {
-	SetUserInfo(string) (string, error)
+	SetUserInfo(pub.UserInfoRequest) (string, error)
 	Count(string) int
-	OnLogin(pub.LoginRequest) (string, error)
+	OnLogin(pub.LoginRequest) (error, int)
 }
 
 type UstringService struct{}
 
-func (UstringService) SetUserInfo(s string) (string, error) {
-	if s == "" {
-		return "", ErrEmpty
-	}
-	fmt.Println("SetUserInfo NikeName:", s)
-	return strings.ToUpper(s), nil
+func (UstringService) SetUserInfo(request pub.UserInfoRequest) (string, error) {
+	fmt.Println("SetUserInfo NickName:", request.NickName)
+
+	return strings.ToUpper(request.NickName), nil
 }
 
-func (UstringService) OnLogin(request pub.LoginRequest) (string, error) {
+func (UstringService) OnLogin(request pub.LoginRequest) (error, int) {
 	fmt.Println("onlogin:", request.Code)
-	//v := url.Values{}
 	//get openid and serectkey
+	/*
+		err, session := GetSession(request.Code)
+		if err != nil {
+			return err, http.StatusBadGateway
+		}
+		if db.IsExistOpenID(session.Openid) {
+			db.UpdateSessionKey(session.Openid, session.SessionKey)
+			return nil, http.StatusOK
+		}
+	*/
+	return nil, http.StatusNoContent
+
 	/*
 		if IsExist(openid)
 		    UpdateDBSecretKey()
@@ -40,22 +58,30 @@ func (UstringService) OnLogin(request pub.LoginRequest) (string, error) {
 			GetUserInfo()
 			AddDBUserInfo()
 	*/
-	return request.Code, nil
 }
 
-func GetSession(code string) (string, string) {
+func GetSession(code string) (error, LoginSession) {
 	//LoginWeiXinServerUrl = "https://api.weixin.qq.com/sns/jscode2session?
 	//appid=APPID&secret=APPSECRET&js_code=JSCODE&grant_type=authorization_code"
+	session := LoginSession{}
 	value := url.Values{}
 	value.Set("appid", TagAppId)
 	value.Set("secret", TagAppSecret)
 	value.Set("js_code", code)
 	value.Set("grant_type", TagAuthCodeFlag)
 	loginUrl := fmt.Sprintf("%s?%s", TagLoginWeiXinServerUrl, value.Encode())
-	client.HttpDo("GET", loginUrl, []byte(""))
-	var openId string
-	var sessionKey string
-	return openId, sessionKey
+	err, body := client.HttpDo("GET", loginUrl, []byte(""))
+	if err != nil {
+		fmt.Println("get url:", loginUrl, " err:", err)
+		return err, session
+	}
+
+	err = json.Unmarshal(body, &session)
+	if err != nil {
+		fmt.Println("unmarshal body ", string(body), " err:", err)
+		return err, session
+	}
+	return nil, session
 }
 
 func (UstringService) Count(s string) int {

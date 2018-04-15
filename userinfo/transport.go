@@ -22,7 +22,7 @@ func SetUserInfoEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(pub.UserInfoRequest)
 		fmt.Println("SetUserInfoEndpoint:", req)
-		v, err := svc.SetUserInfo(req.NickName)
+		v, err := svc.SetUserInfo(req)
 		if err != nil {
 			return pub.UserResponse{v, 500}, nil
 		}
@@ -41,8 +41,8 @@ func UdecodeUserInfoRequest(_ context.Context, r *http.Request) (interface{}, er
 func OnLoginEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(pub.LoginRequest)
-		v, _ := svc.OnLogin(req)
-		return pub.UserResponse{v, 200}, nil
+		_, code := svc.OnLogin(req)
+		return pub.UserResponse{"", code}, nil
 	}
 }
 

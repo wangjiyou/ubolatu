@@ -18,8 +18,8 @@ import (
 
 //var conf = config.GlobalConfig()
 
-func HttpDo(_method string, _url string, _data []byte) (error, string) {
-	var result string
+func HttpDo(_method string, _url string, _data []byte) (error, []byte) {
+	var result []byte
 	var err error
 	err, result = _HttpDo(_method, _url, _data)
 	if err != nil {
@@ -31,7 +31,7 @@ func HttpDo(_method string, _url string, _data []byte) (error, string) {
 	return err, result
 }
 
-func _HttpDo(_method string, _url string, _data []byte) (error, string) {
+func _HttpDo(_method string, _url string, _data []byte) (error, []byte) {
 	var body []byte
 	var response *http.Response
 	var request *http.Request
@@ -76,9 +76,9 @@ func _HttpDo(_method string, _url string, _data []byte) (error, string) {
 	}
 
 	if err == nil {
-		return nil, string(body)
+		return nil, body
 	} else {
-		return err, ""
+		return err, []byte("")
 	}
 }
 

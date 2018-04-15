@@ -16,7 +16,7 @@ type UinstrumentingMiddleware struct {
 	Next           StringService
 }
 
-func (mw UinstrumentingMiddleware) SetUserInfo(s string) (output string, err error) {
+func (mw UinstrumentingMiddleware) SetUserInfo(s pub.UserInfoRequest) (output string, err error) {
 	defer func(begin time.Time) {
 		lvs := []string{"method", "uppercase", "error", fmt.Sprint(err != nil)}
 		mw.RequestCount.With(lvs...).Add(1)
@@ -27,14 +27,14 @@ func (mw UinstrumentingMiddleware) SetUserInfo(s string) (output string, err err
 	return
 }
 
-func (mw UinstrumentingMiddleware) OnLogin(s pub.LoginRequest) (output string, err error) {
+func (mw UinstrumentingMiddleware) OnLogin(s pub.LoginRequest) (err error, code int) {
 	defer func(begin time.Time) {
 		lvs := []string{"method", "uppercase", "error", fmt.Sprint(err != nil)}
 		mw.RequestCount.With(lvs...).Add(1)
 		mw.RequestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
 	}(time.Now())
 
-	output, err = mw.Next.OnLogin(s)
+	err, code = mw.Next.OnLogin(s)
 	return
 }
 
