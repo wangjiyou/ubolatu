@@ -5,26 +5,16 @@ import (
 	"time"
 
 	"ubolatu/config"
-	"ubolatu/pub"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 )
-
-type UserInfo pub.UserInfoRequest
 
 var conf = config.GlobalConfig()
 var orm *gorm.DB
 
 func InitMysql() {
 	var err error
-	/*
-	           "UserName":"root",
-	           "Password":"123456",
-	           "IPAddress":"10.31.2.212",
-	           "PortAddress":"3306",
-	   		"DBName":"Center",
-	*/
 	dbHost := conf.IPAddress
 	dbName := conf.DBName      //"center"
 	dbUser := conf.UserName    //"root"
@@ -44,41 +34,5 @@ func InitMysql() {
 		orm, err = gorm.Open(dbType, connectString)
 	}
 	fmt.Println("connect OK")
-	userInfo := UserInfo{}
-	userInfo.NickName = "wangjiyou"
-	orm.Save(&userInfo)
-
-	rows, err := orm.Table("user_infos").Where("nick_name = 'wangjiyou'").Rows()
-	if err != nil {
-		fmt.Printf("Not error should happen, got %v", err)
-		return
-	}
-
-	var results []UserInfo
-	for rows.Next() {
-		var result UserInfo
-		if err := orm.ScanRows(rows, &result); err != nil {
-			fmt.Printf("should get no error, but got %v", err)
-		}
-		results = append(results, result)
-	}
-	fmt.Println("result:", results)
-	UpdateDelete()
-}
-
-func UpdateDelete() {
-	err := orm.Model(UserInfo{}).Where(&UserInfo{NickName: "wangjiyou"}).Update("NickName", "hahah").Error
-	if err != nil {
-		fmt.Println("Unxpected error on conditional update err:", err)
-		return
-	}
-	fmt.Println("Update OK")
-
-	err = orm.Where(UserInfo{NickName: "hahah"}).Delete(&UserInfo{}).Error
-	if err != nil {
-		fmt.Println("Unexpected error on conditional delete")
-		return
-	}
-	fmt.Println("Delete OK")
-
+	CreateUserInfos()
 }

@@ -30,6 +30,14 @@ func (UstringService) SetUserInfo(s string) (string, error) {
 func (UstringService) OnLogin(request pub.LoginRequest) (string, error) {
 	fmt.Println("onlogin:", request.Code)
 	//v := url.Values{}
+	//get openid and serectkey
+	/*
+		if IsExist(openid)
+		    UpdateDBSecretKey()
+		else
+			GetUserInfo()
+			AddDBUserInfo()
+	*/
 	return request.Code, nil
 }
 

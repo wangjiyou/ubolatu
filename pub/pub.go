@@ -12,6 +12,7 @@ type UserInfoRequest struct {
 	PhoneNumber     string `json:"phoneNumber"`
 	PurePhoneNumber string `json:"purePhoneNumber"`
 	CountryCode     string `json:"countryCode"`
+	SessionKey      string `json:"sessionKey"`
 	Timestamp       string `json:"timestamp"`
 }
 
