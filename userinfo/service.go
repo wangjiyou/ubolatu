@@ -3,10 +3,12 @@ package userinfo
 import (
 	"errors"
 	"fmt"
+	"net/url"
 	"strings"
 
 	"github.com/xlstudio/wxbizdatacrypt"
 
+	"ubolatu/client"
 	"ubolatu/pub"
 )
 
@@ -39,6 +41,21 @@ func (UstringService) OnLogin(request pub.LoginRequest) (string, error) {
 			AddDBUserInfo()
 	*/
 	return request.Code, nil
+}
+
+func GetSession(code string) (string, string) {
+	//LoginWeiXinServerUrl = "https://api.weixin.qq.com/sns/jscode2session?
+	//appid=APPID&secret=APPSECRET&js_code=JSCODE&grant_type=authorization_code"
+	value := url.Values{}
+	value.Set("appid", TagAppId)
+	value.Set("secret", TagAppSecret)
+	value.Set("js_code", code)
+	value.Set("grant_type", TagAuthCodeFlag)
+	loginUrl := fmt.Sprintf("%s?%s", TagLoginWeiXinServerUrl, value.Encode())
+	client.HttpDo("GET", loginUrl, []byte(""))
+	var openId string
+	var sessionKey string
+	return openId, sessionKey
 }
 
 func (UstringService) Count(s string) int {

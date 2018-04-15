@@ -12,8 +12,10 @@ import (
 )
 
 const (
-	//LoginWeiXinServerUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code"
-	LoginWeiXinServerUrl = "https://api.weixin.qq.com/sns/jscode2session"
+	TagLoginWeiXinServerUrl = "https://api.weixin.qq.com/sns/jscode2session"
+	TagAuthCodeFlag         = "authorization_code"
+	TagAppId                = "123"
+	TagAppSecret            = "qwe"
 )
 
 func SetUserInfoEndpoint(svc StringService) endpoint.Endpoint {
