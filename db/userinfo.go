@@ -13,6 +13,11 @@ import (
 
 type UserInfo pub.UserInfoRequest
 
+func SetUserInfo(_info pub.UserInfoRequest) {
+	info := UserInfo(_info)
+	orm.Save(&info)
+}
+
 func IsExistOpenID(openId string) bool {
 	_, err := orm.Table("user_infos").Where("open_id = ?", openId).Rows()
 	if err != nil {

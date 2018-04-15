@@ -11,7 +11,7 @@ import (
 	"github.com/xlstudio/wxbizdatacrypt"
 
 	"ubolatu/client"
-	//"ubolatu/db"
+	"ubolatu/db"
 	"ubolatu/pub"
 )
 
@@ -32,7 +32,7 @@ type UstringService struct{}
 
 func (UstringService) SetUserInfo(request pub.UserInfoRequest) (string, error) {
 	fmt.Println("SetUserInfo NickName:", request.NickName)
-
+	db.SetUserInfo(request)
 	return strings.ToUpper(request.NickName), nil
 }
 

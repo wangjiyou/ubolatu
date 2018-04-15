@@ -89,7 +89,7 @@ func main() {
 	)
 	db.InitMysql()
 
-	http.Handle("/u-setuserinfo", u_setuserinfoHandler)
+	http.Handle("/setUserInfo", u_setuserinfoHandler)
 	http.Handle("/onLogin", u_loginHandler)
 
 	http.Handle("/metrics", promhttp.Handler())
