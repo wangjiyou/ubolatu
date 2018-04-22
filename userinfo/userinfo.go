@@ -67,12 +67,13 @@ func GetSession(code string) (error, LoginSession) {
 		fmt.Println("get url:", loginUrl, " err:", err)
 		return err, session
 	}
-	fmt.Println("get url:", loginUrl, "session:", session)
+	fmt.Println("get url:", loginUrl, "session:", string(body))
 	err = json.Unmarshal(body, &session)
 	if err != nil {
 		fmt.Println("unmarshal body ", string(body), " err:", err)
 		return err, session
 	}
+	fmt.Println("session:", session)
 	return nil, session
 }
 
