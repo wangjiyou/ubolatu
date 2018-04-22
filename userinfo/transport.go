@@ -22,17 +22,18 @@ const (
 func SetUserInfoEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(pub.FullUserInfo)
-		fmt.Println("set user info:", req)
-		fmt.Println("set user info req.rawData:", req.RawData)
-		fmt.Println("set user info req.UserInfo.NikeName:", req.UserInfo.NickName)
-		/*
-			req := request.(pub.UserInfoRequest)
-			fmt.Println("SetUserInfoEndpoint:", req)
-			v, err := svc.SetUserInfo(req)
-			if err != nil {
-				return pub.UserResponse{v, 500}, nil
-			}
-		*/
+		//fmt.Println("set user info:", req)
+		//fmt.Println("set user info req.rawData:", req.RawData)
+		//fmt.Println("set user info req.UserInfo.NikeName:", req.UserInfo.NickName)
+
+		//req := request.(pub.UserInfoRequest)
+
+		fmt.Println("SetUserInfoEndpoint:", req)
+		v, err := svc.SetUserInfo(req)
+		if err != nil {
+			return pub.UserResponse{v, 500}, nil
+		}
+
 		return pub.UserResponse{"OK", 200}, nil
 	}
 }
@@ -52,8 +53,8 @@ func UdecodeUserInfoRequest(_ context.Context, r *http.Request) (interface{}, er
 		return nil, err
 	}
 	//(appID string, sessionKey string, encryptedData string, iv string)
-	sessionKey := `4upDyvJumQRUKp6p9P\/\/Wg==`
-	EncryptedTest(TagAppId, string(sessionKey), request.EncryptedData, request.Iv)
+	//sessionKey := `4upDyvJumQRUKp6p9P\/\/Wg==`
+	//EncryptedTest(TagAppId, string(sessionKey), request.EncryptedData, request.Iv)
 	fmt.Println("UdecodeUserInfoRequest ok,request:", request)
 	return request, nil
 }

@@ -32,14 +32,42 @@ type UstringService struct{}
 
 func (UstringService) SetUserInfo(request pub.FullUserInfo) (string, error) {
 	fmt.Println("SetUserInfo full userinfo:", request)
-	//fmt.Println("SetUserInfo NickName:", request.NickName)
-	//db.SetUserInfo(request)
+	/*
+		type STUserInfo struct {
+			NickName  string `json:"nickName"`
+			AvatarUrl string `json:"avatarUrl"`
+			Gender    int    `json:"gender"`
+			City      string `json:"city"`
+			Province  string `json:"province"`
+			Country   string `json:"country"`
+			Language  string `json:"language"`
+		}
+	*/
+	/*
+		type UserInfoRequest struct {
+			OpenID          string `json:"openId"`
+			NickName        string `json:"nickName"`
+			Gender          string `json:"gender"`
+			City            string `json:"city"`
+			Province        string `json:"province"`
+			Country         string `json:"country"`
+			AvatarURL       string `json:"avatarUrl"`
+			UnionID         string `json:"unionId"`
+			PhoneNumber     string `json:"phoneNumber"`
+			PurePhoneNumber string `json:"purePhoneNumber"`
+			CountryCode     string `json:"countryCode"`
+			SessionKey      string `json:"sessionKey"`
+			Timestamp       string `json:"timestamp"`
+		}
+	*/
+	userInfo := pub.UserInfoRequest{}
+	db.SetUserInfo(userInfo)
 	//return strings.ToUpper(request.NickName), nil
 	return "", nil
 }
 
 func (UstringService) OnLogin(request pub.LoginRequest) (string, int) {
-	fmt.Println("onlogin:", request.Code)
+	//fmt.Println("onlogin:", request.Code)
 	//get openid and serectkey
 
 	err, session := GetSession(request.Code)
@@ -47,7 +75,7 @@ func (UstringService) OnLogin(request pub.LoginRequest) (string, int) {
 		return err.Error(), http.StatusBadGateway
 	}
 	if db.IsExistOpenID(session.Openid) {
-		db.UpdateSessionKey(session.Openid, session.SessionKey)
+		db.SetSessionKey(session.Openid, session.SessionKey)
 		return session.Openid, http.StatusOK
 	}
 
