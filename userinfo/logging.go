@@ -13,7 +13,7 @@ type UloggingMiddleware struct {
 	Next   StringService
 }
 
-func (mw UloggingMiddleware) SetUserInfo(s pub.UserInfoRequest) (output string, err error) {
+func (mw UloggingMiddleware) SetUserInfo(s pub.FullUserInfo) (output string, err error) {
 	defer func(begin time.Time) {
 		_ = mw.Logger.Log(
 			"method", "SetUserInfo",
@@ -28,18 +28,18 @@ func (mw UloggingMiddleware) SetUserInfo(s pub.UserInfoRequest) (output string, 
 	return
 }
 
-func (mw UloggingMiddleware) OnLogin(s pub.LoginRequest) (err error, code int) {
+func (mw UloggingMiddleware) OnLogin(s pub.LoginRequest) (openId string, code int) {
 	defer func(begin time.Time) {
 		_ = mw.Logger.Log(
 			"method", "OnLogin",
 			"input", s,
 			"output", code,
-			"err", err,
+			"err", openId,
 			"took", time.Since(begin),
 		)
 	}(time.Now())
 
-	err, code = mw.Next.OnLogin(s)
+	openId, code = mw.Next.OnLogin(s)
 	return
 }
 
