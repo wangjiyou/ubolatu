@@ -14,8 +14,8 @@ import (
 const (
 	TagLoginWeiXinServerUrl = "https://api.weixin.qq.com/sns/jscode2session"
 	TagAuthCodeFlag         = "authorization_code"
-	TagAppId                = "123"
-	TagAppSecret            = "qwe"
+	TagAppId                = "wx167df20a470f1429"
+	TagAppSecret            = "df2a93e9e249ebc2a12f4841a6d503d7"
 )
 
 func SetUserInfoEndpoint(svc StringService) endpoint.Endpoint {
@@ -57,18 +57,3 @@ func OnLoginRequest(_ context.Context, r *http.Request) (interface{}, error) {
 func UencodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	return json.NewEncoder(w).Encode(response)
 }
-
-/*
-type uppercaseResponse struct {
-	V   string `json:"v"`
-	Err string `json:"err,omitempty"`
-}
-
-type countRequest struct {
-	S string `json:"s"`
-}
-
-type countResponse struct {
-	V int `json:"v"`
-}
-*/

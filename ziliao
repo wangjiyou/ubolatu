@@ -1,1 +1,4 @@
 curl -XPOST -d'{"nickName":"Hellowangjiyou"}' localhost:8080/u-setuserinfo
+
+
+curl -XPOST -d'{"code":"123123123123"}' localhost:8080/u-setuserinfo

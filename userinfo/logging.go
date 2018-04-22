@@ -16,7 +16,7 @@ type UloggingMiddleware struct {
 func (mw UloggingMiddleware) SetUserInfo(s pub.UserInfoRequest) (output string, err error) {
 	defer func(begin time.Time) {
 		_ = mw.Logger.Log(
-			"method", "uppercase",
+			"method", "SetUserInfo",
 			"input", s,
 			"output", output,
 			"err", err,

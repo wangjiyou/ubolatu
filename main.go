@@ -95,4 +95,8 @@ func main() {
 	http.Handle("/metrics", promhttp.Handler())
 	logger.Log("msg", "HTTP", "addr", ":8080")
 	logger.Log("err", http.ListenAndServe(":8080", nil))
+	/*
+		    http.ListenAndServeTLS(":8081", "server.crt",
+	                           "server.key", nil)
+	*/
 }

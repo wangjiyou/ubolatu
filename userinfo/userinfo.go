@@ -39,25 +39,17 @@ func (UstringService) SetUserInfo(request pub.UserInfoRequest) (string, error) {
 func (UstringService) OnLogin(request pub.LoginRequest) (error, int) {
 	fmt.Println("onlogin:", request.Code)
 	//get openid and serectkey
-	/*
-		err, session := GetSession(request.Code)
-		if err != nil {
-			return err, http.StatusBadGateway
-		}
-		if db.IsExistOpenID(session.Openid) {
-			db.UpdateSessionKey(session.Openid, session.SessionKey)
-			return nil, http.StatusOK
-		}
-	*/
-	return nil, http.StatusNoContent
 
-	/*
-		if IsExist(openid)
-		    UpdateDBSecretKey()
-		else
-			GetUserInfo()
-			AddDBUserInfo()
-	*/
+	err, session := GetSession(request.Code)
+	if err != nil {
+		return err, http.StatusBadGateway
+	}
+	if db.IsExistOpenID(session.Openid) {
+		db.UpdateSessionKey(session.Openid, session.SessionKey)
+		return nil, http.StatusOK
+	}
+
+	return nil, http.StatusNoContent
 }
 
 func GetSession(code string) (error, LoginSession) {
@@ -75,7 +67,7 @@ func GetSession(code string) (error, LoginSession) {
 		fmt.Println("get url:", loginUrl, " err:", err)
 		return err, session
 	}
-
+	fmt.Println("get url:", loginUrl, "session:", session)
 	err = json.Unmarshal(body, &session)
 	if err != nil {
 		fmt.Println("unmarshal body ", string(body), " err:", err)

@@ -5,13 +5,13 @@ import (
 	//"crypto/hmac"
 	//"crypto/sha1"
 	//"encoding/hex"
-	//"fmt"
+	"crypto/tls"
 	"io/ioutil"
-	"net"
+	//"net"
 	"net/http"
 	"net/http/httputil"
 	//"net/url"
-	"time"
+	//"time"
 
 	//"ubolatu/config"
 )
@@ -45,7 +45,7 @@ func _HttpDo(_method string, _url string, _data []byte) (error, []byte) {
 		request, err = http.NewRequest(method, url, bytes.NewBuffer(data))
 	}
 
-	timeout := time.Duration(time.Duration(10) * time.Second)
+	//timeout := time.Duration(time.Duration(10) * time.Second)
 	if err == nil {
 		/*
 			for k, v := range GenerateHeader(method, url) {
@@ -53,18 +53,24 @@ func _HttpDo(_method string, _url string, _data []byte) (error, []byte) {
 			}
 		*/
 		debug(httputil.DumpRequestOut(request, true))
-		client := http.Client{
-			Transport: &http.Transport{
-				Proxy: http.ProxyFromEnvironment,
-				Dial: (&net.Dialer{
-					Timeout:   2 * time.Second,
-					Deadline:  time.Now().Add(3 * time.Second),
-					KeepAlive: 2 * time.Second,
-				}).Dial,
-				TLSHandshakeTimeout: 2 * time.Second,
-			},
-			Timeout: timeout * time.Second,
+		tr := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
+		client := &http.Client{Transport: tr}
+		/*
+			client := http.Client{
+				Transport: &http.Transport{
+					Proxy: http.ProxyFromEnvironment,
+					Dial: (&net.Dialer{
+						Timeout:   2 * time.Second,
+						Deadline:  time.Now().Add(3 * time.Second),
+						KeepAlive: 2 * time.Second,
+					}).Dial,
+					TLSHandshakeTimeout: 2 * time.Second,
+				},
+				Timeout: timeout * time.Second,
+			}
+		*/
 		response, err = client.Do(request)
 		//response, err = (&http.Client{Timeout: timeout}).Do(request)
 	}
