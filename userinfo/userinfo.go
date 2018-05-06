@@ -32,7 +32,10 @@ type UstringService struct{}
 
 func (UstringService) SetUserInfo(request pub.FullUserInfo) (string, error) {
 	fmt.Println("SetUserInfo full userinfo:", request)
-
+	if request.OpenID == "" {
+		fmt.Println("OpenID is nill")
+		return "OpenID is nill", errors.New("OpenID is nill")
+	}
 	userInfo := pub.UserInfoRequest{}
 	userInfo.OpenID = request.OpenID
 	userInfo.NickName = request.UserInfo.NickName
