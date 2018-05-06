@@ -26,30 +26,14 @@ type LoginRequest struct {
 }
 
 type FullUserInfo struct {
-	UserInfo      STUserInfo
-	RawData       string `json:"rawData"`
-	Signature     string `json:"signature"`
-	EncryptedData string `json:"encryptedData"`
-	Iv            string `json:"iv"`
+	OpenID        string     `json:"openId"`
+	RawData       string     `json:"rawData"`
+	Signature     string     `json:"signature"`
+	EncryptedData string     `json:"encryptedData"`
+	Iv            string     `json:"iv"`
+	UserInfo      STUserInfo `json:"userInfo"`
 }
 
-/*
-type FullUserInfo struct {
-	UserInfo struct {
-		NickName  string `json:"nickName"`
-		Gender    int    `json:"gender"`
-		Language  string `json:"language"`
-		City      string `json:"city"`
-		Province  string `json:"province"`
-		Country   string `json:"country"`
-		AvatarURL string `json:"avatarUrl"`
-	} `json:"userInfo"`
-	RawData       string `json:"rawData"`
-	Signature     string `json:"signature"`
-	EncryptedData string `json:"encryptedData"`
-	Iv            string `json:"iv"`
-}
-*/
 type STUserInfo struct {
 	NickName  string `json:"nickName"`
 	AvatarUrl string `json:"avatarUrl"`

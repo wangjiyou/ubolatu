@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	//"strings"
+	"time"
 
 	"github.com/xlstudio/wxbizdatacrypt"
 
@@ -32,35 +32,19 @@ type UstringService struct{}
 
 func (UstringService) SetUserInfo(request pub.FullUserInfo) (string, error) {
 	fmt.Println("SetUserInfo full userinfo:", request)
-	/*
-		type STUserInfo struct {
-			NickName  string `json:"nickName"`
-			AvatarUrl string `json:"avatarUrl"`
-			Gender    int    `json:"gender"`
-			City      string `json:"city"`
-			Province  string `json:"province"`
-			Country   string `json:"country"`
-			Language  string `json:"language"`
-		}
-	*/
-	/*
-		type UserInfoRequest struct {
-			OpenID          string `json:"openId"`
-			NickName        string `json:"nickName"`
-			Gender          string `json:"gender"`
-			City            string `json:"city"`
-			Province        string `json:"province"`
-			Country         string `json:"country"`
-			AvatarURL       string `json:"avatarUrl"`
-			UnionID         string `json:"unionId"`
-			PhoneNumber     string `json:"phoneNumber"`
-			PurePhoneNumber string `json:"purePhoneNumber"`
-			CountryCode     string `json:"countryCode"`
-			SessionKey      string `json:"sessionKey"`
-			Timestamp       string `json:"timestamp"`
-		}
-	*/
+
 	userInfo := pub.UserInfoRequest{}
+	userInfo.OpenID = request.OpenID
+	userInfo.NickName = request.UserInfo.NickName
+	userInfo.Gender = fmt.Sprintf("%v", request.UserInfo.Gender)
+	userInfo.AvatarURL = request.UserInfo.AvatarUrl
+	userInfo.City = request.UserInfo.City
+	userInfo.Province = request.UserInfo.Province
+	userInfo.Country = request.UserInfo.Country
+	userInfo.UnionID = ""
+	userInfo.PhoneNumber = ""
+	userInfo.Timestamp = time.Now().String()
+
 	db.SetUserInfo(userInfo)
 	//return strings.ToUpper(request.NickName), nil
 	return "", nil
@@ -79,7 +63,7 @@ func (UstringService) OnLogin(request pub.LoginRequest) (string, int) {
 		return session.Openid, http.StatusOK
 	}
 
-	return session.Openid, http.StatusNoContent
+	return session.Openid, http.StatusOK //http.StatusNoContent
 }
 
 func GetSession(code string) (error, LoginSession) {

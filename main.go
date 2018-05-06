@@ -88,6 +88,7 @@ func main() {
 		userinfo.UencodeResponse,
 	)
 	db.InitMysql()
+	db.InitTiDB()
 
 	http.Handle("/setUserInfo", u_setuserinfoHandler)
 	http.Handle("/onLogin", u_loginHandler)
@@ -96,7 +97,7 @@ func main() {
 	logger.Log("msg", "HTTP", "addr", ":8080")
 	logger.Log("err", http.ListenAndServe(":8080", nil))
 	/*
-		    http.ListenAndServeTLS(":8081", "server.crt",
-	                           "server.key", nil)
+			    http.ListenAndServeTLS(":8081", "server.crt",
+		                           "server.key", nil)
 	*/
 }

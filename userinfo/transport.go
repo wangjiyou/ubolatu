@@ -63,6 +63,7 @@ func OnLoginEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(pub.LoginRequest)
 		openid, code := svc.OnLogin(req)
+		fmt.Println("OnLoginEndpoint openid:", openid, " code:", code)
 		return pub.UserResponse{openid, code}, nil
 	}
 }
