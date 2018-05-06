@@ -70,6 +70,9 @@ func main() {
 	http.Handle("/count", countHandler)
 	//test end
 
+	db.InitMysql()
+	db.InitTiDB()
+
 	//----userinfo start
 	var u_svc userinfo.StringService
 	u_svc = userinfo.UstringService{}
@@ -87,11 +90,17 @@ func main() {
 		userinfo.OnLoginRequest,
 		userinfo.UencodeResponse,
 	)
-	db.InitMysql()
-	db.InitTiDB()
-
-	http.Handle("/setUserInfo", u_setuserinfoHandler)
+	/*
+		u_addFriendHandler := httptransport.NewServer(
+			userinfo.OnLoginEndpoint(u_svc),
+			userinfo.OnLoginRequest,
+			userinfo.UencodeResponse,
+		)
+	*/
 	http.Handle("/onLogin", u_loginHandler)
+	http.Handle("/setUserInfo", u_setuserinfoHandler)
+
+	//http.Handle("/addFriend")
 
 	http.Handle("/metrics", promhttp.Handler())
 	logger.Log("msg", "HTTP", "addr", ":8080")

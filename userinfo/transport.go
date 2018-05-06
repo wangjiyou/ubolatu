@@ -1,7 +1,7 @@
 package userinfo
 
 import (
-	//"bytes"
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -42,16 +42,19 @@ func UdecodeUserInfoRequest(_ context.Context, r *http.Request) (interface{}, er
 	var request pub.FullUserInfo
 
 	fmt.Println("------UdecodeUserInfoRequest------")
-	//buf := new(bytes.Buffer)
-	//buf.ReadFrom(r.Body)
-	//s := buf.String()
-	//fmt.Println("r.Body:", s)
-	//return nil, nil
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(r.Body)
+	s := buf.String()
 
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		fmt.Println("UdecodeUserInfoRequest err:", err)
+	err := json.Unmarshal([]byte(s), &request)
+	if err != nil {
+		fmt.Println("UdecodeUserInfoRequest err:", err, " body:", s)
 		return nil, err
 	}
+	//if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+	//	fmt.Println("UdecodeUserInfoRequest err:", err)
+	//	return nil, err
+	//}
 	//(appID string, sessionKey string, encryptedData string, iv string)
 	//sessionKey := `4upDyvJumQRUKp6p9P\/\/Wg==`
 	//EncryptedTest(TagAppId, string(sessionKey), request.EncryptedData, request.Iv)
