@@ -2,13 +2,8 @@ package db
 
 import (
 	"fmt"
-	//"time"
 
-	//"ubolatu/config"
 	"ubolatu/pub"
-
-	//_ "github.com/go-sql-driver/mysql"
-	//"github.com/jinzhu/gorm"
 )
 
 type UserInfo pub.UserInfoRequest

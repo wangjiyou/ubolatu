@@ -32,5 +32,5 @@ func InitTiDB() {
 		ormTiDB, err = gorm.Open(dbType, connectString)
 	}
 	fmt.Println("connect OK")
-	//CreateUserInfos()
+	CreateFriendShips()
 }

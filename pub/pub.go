@@ -43,3 +43,11 @@ type STUserInfo struct {
 	Country   string `json:"country"`
 	Language  string `json:"language"`
 }
+
+type FriendShipRequest struct {
+	OwnerID    string `json:"ownerId"`
+	FriendID   string `json:"friendId"`
+	FriendName string `json:"friendName"`
+	AddType    string `json:"addType"`
+	CreateAt   string `json:"createAt"`
+}
