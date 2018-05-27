@@ -26,9 +26,21 @@ type StringService interface {
 	SetUserInfo(pub.FullUserInfo) (string, error)
 	Count(string) int
 	OnLogin(pub.LoginRequest) (string, int)
+	AddFriend(pub.FullUserInfo) (string, error)
 }
 
 type UstringService struct{}
+
+func (UstringService) AddFriend(request pub.FullUserInfo) (string, error) {
+	/*
+		err, session := GetSession(request.Code)
+		if err != nil {
+			return err.Error(), http.StatusBadGateway
+		}
+		return session.Openid, http.StatusOK
+	*/
+	return "", nil
+}
 
 func (UstringService) SetUserInfo(request pub.FullUserInfo) (string, error) {
 	fmt.Println("SetUserInfo full userinfo:", request)
@@ -47,6 +59,9 @@ func (UstringService) SetUserInfo(request pub.FullUserInfo) (string, error) {
 	userInfo.UnionID = ""
 	userInfo.PhoneNumber = ""
 	userInfo.Timestamp = time.Now().String()
+	if db.IsExistOpenID(request.OpenID) {
+		db.DeleteUserInfo(request.OpenID)
+	}
 
 	db.SetUserInfo(userInfo)
 	//return strings.ToUpper(request.NickName), nil
@@ -61,10 +76,10 @@ func (UstringService) OnLogin(request pub.LoginRequest) (string, int) {
 	if err != nil {
 		return err.Error(), http.StatusBadGateway
 	}
-	if db.IsExistOpenID(session.Openid) {
-		db.SetSessionKey(session.Openid, session.SessionKey)
-		return session.Openid, http.StatusOK
-	}
+	//	if db.IsExistOpenID(session.Openid) {
+	//		db.SetSessionKey(session.Openid, session.SessionKey)
+	//		return session.Openid, http.StatusOK
+	//	}
 
 	return session.Openid, http.StatusOK //http.StatusNoContent
 }

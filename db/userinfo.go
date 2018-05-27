@@ -13,6 +13,15 @@ import (
 
 type UserInfo pub.UserInfoRequest
 
+func DeleteUserInfo(openId string) error {
+	err := orm.Where(UserInfo{OpenID: openId}).Delete(&UserInfo{}).Error
+	if err != nil {
+		fmt.Println("delete openId:", openId, " err:", err)
+		return err
+	}
+	return nil
+}
+
 func SetUserInfo(_info pub.UserInfoRequest) {
 	info := UserInfo(_info)
 	orm.Save(&info)

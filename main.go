@@ -90,17 +90,16 @@ func main() {
 		userinfo.OnLoginRequest,
 		userinfo.UencodeResponse,
 	)
-	/*
-		u_addFriendHandler := httptransport.NewServer(
-			userinfo.OnLoginEndpoint(u_svc),
-			userinfo.OnLoginRequest,
-			userinfo.UencodeResponse,
-		)
-	*/
+
+	u_addFriendHandler := httptransport.NewServer(
+		userinfo.AddFriendEndpoint(u_svc),
+		userinfo.AddFriendRequest,
+		userinfo.UencodeResponse,
+	)
+
 	http.Handle("/onLogin", u_loginHandler)
 	http.Handle("/setUserInfo", u_setuserinfoHandler)
-
-	//http.Handle("/addFriend")
+	http.Handle("/addFriend", u_addFriendHandler)
 
 	http.Handle("/metrics", promhttp.Handler())
 	logger.Log("msg", "HTTP", "addr", ":8080")

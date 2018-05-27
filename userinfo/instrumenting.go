@@ -16,9 +16,20 @@ type UinstrumentingMiddleware struct {
 	Next           StringService
 }
 
+func (mw UinstrumentingMiddleware) AddFriend(s pub.FullUserInfo) (output string, err error) {
+	defer func(begin time.Time) {
+		lvs := []string{"method", "addfriend", "error", fmt.Sprint(err != nil)}
+		mw.RequestCount.With(lvs...).Add(1)
+		mw.RequestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+	}(time.Now())
+	fmt.Println("instrument SetUserInfo")
+	output, err = mw.Next.AddFriend(s)
+	return
+}
+
 func (mw UinstrumentingMiddleware) SetUserInfo(s pub.FullUserInfo) (output string, err error) {
 	defer func(begin time.Time) {
-		lvs := []string{"method", "uppercase", "error", fmt.Sprint(err != nil)}
+		lvs := []string{"method", "set userinfos", "error", fmt.Sprint(err != nil)}
 		mw.RequestCount.With(lvs...).Add(1)
 		mw.RequestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
 	}(time.Now())
@@ -29,7 +40,7 @@ func (mw UinstrumentingMiddleware) SetUserInfo(s pub.FullUserInfo) (output strin
 
 func (mw UinstrumentingMiddleware) OnLogin(s pub.LoginRequest) (openId string, code int) {
 	defer func(begin time.Time) {
-		//lvs := []string{"method", "uppercase", "error", fmt.Sprint(err != nil)}
+		//lvs := []string{"method", "on login", "error", fmt.Sprint(err != nil)}
 		lvs := []string{"method", "OnLogin", "error", openId}
 		mw.RequestCount.With(lvs...).Add(1)
 		mw.RequestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
