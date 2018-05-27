@@ -83,10 +83,10 @@ func CreateUserInfos() bool {
 
 func ISUDTest() {
 	userInfo := UserInfo{}
-	userInfo.NickName = "wangjiyou"
+	userInfo.NickName = "nickname_test"
 	orm.Save(&userInfo)
 
-	rows, err := orm.Table("user_infos").Where("nick_name = 'wangjiyou'").Rows()
+	rows, err := orm.Table("user_infos").Where("nick_name = 'nickname_test'").Rows()
 	if err != nil {
 		fmt.Printf("Not error should happen, got %v", err)
 		return
@@ -102,7 +102,7 @@ func ISUDTest() {
 	}
 	fmt.Println("result:", results)
 
-	err = orm.Model(UserInfo{}).Where(&UserInfo{NickName: "wangjiyou"}).Update("NickName", "hahah").Error
+	err = orm.Model(UserInfo{}).Where(&UserInfo{NickName: "nickname_test"}).Update("NickName", "hahah").Error
 	if err != nil {
 		fmt.Println("Unxpected error on conditional update err:", err)
 		return
