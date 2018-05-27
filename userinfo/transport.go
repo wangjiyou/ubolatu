@@ -21,7 +21,7 @@ const (
 
 func AddFriendEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(pub.FullUserInfo)
+		req := request.(pub.FriendShipRequest)
 		/*openid, code :=*/ svc.AddFriend(req)
 		//fmt.Println("AddFriendEndpoint openid:", openid, " code:", code)
 		return pub.UserResponse{"", 200}, nil
@@ -29,7 +29,7 @@ func AddFriendEndpoint(svc StringService) endpoint.Endpoint {
 }
 
 func AddFriendRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var request pub.FullUserInfo
+	var request pub.FriendShipRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
 	}

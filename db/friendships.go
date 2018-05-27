@@ -8,6 +8,20 @@ import (
 
 type FriendShip pub.FriendShipRequest
 
+func DeleteFriendShip(OwnerOpenId string, FriendOpenID string) error {
+	err := ormTiDB.Where(FriendShip{OwnerID: OwnerOpenId, FriendID: FriendOpenID}).Delete(&FriendShip{}).Error
+	if err != nil {
+		fmt.Println("delete owneropenId:", OwnerOpenId, "friendID:", FriendOpenID, " err:", err)
+		return err
+	}
+	return nil
+}
+
+func SetFriendShip(_info pub.FriendShipRequest) {
+	info := FriendShip(_info)
+	ormTiDB.Save(&info)
+}
+
 func CreateFriendShips() bool {
 	ok := ormTiDB.HasTable(&FriendShip{})
 	if ok {
@@ -53,7 +67,7 @@ func TidbTest() {
 	}
 	fmt.Println("Update OK")
 
-	err = ormTiDB.Where(FriendShip{FriendName: "hahah"}).Delete(&FriendShip{}).Error
+	err = ormTiDB.Where(FriendShip{FriendName: "nickname_test"}).Delete(&FriendShip{}).Error
 	if err != nil {
 		fmt.Println("Unexpected error on conditional delete")
 		return

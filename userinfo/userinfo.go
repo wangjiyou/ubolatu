@@ -26,12 +26,12 @@ type StringService interface {
 	SetUserInfo(pub.FullUserInfo) (string, error)
 	Count(string) int
 	OnLogin(pub.LoginRequest) (string, int)
-	AddFriend(pub.FullUserInfo) (string, error)
+	AddFriend(pub.FriendShipRequest) (string, error)
 }
 
 type UstringService struct{}
 
-func (UstringService) AddFriend(request pub.FullUserInfo) (string, error) {
+func (UstringService) AddFriend(request pub.FriendShipRequest) (string, error) {
 	/*
 		err, session := GetSession(request.Code)
 		if err != nil {
@@ -39,6 +39,8 @@ func (UstringService) AddFriend(request pub.FullUserInfo) (string, error) {
 		}
 		return session.Openid, http.StatusOK
 	*/
+	fmt.Println("AddFriend request:", request)
+	db.SetFriendShip(request)
 	return "", nil
 }
 
