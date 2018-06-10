@@ -29,22 +29,27 @@ type StringService interface {
 	AddFriend(pub.FriendShipRequest) (string, error)
 	DelFriend(pub.FriendShipRequest) (string, error)
 	ModiFriend(pub.FriendShipRequest) (string, error)
+	FindFriend(pub.FriendShipRequest) (string, error)
 }
 
 type UstringService struct{}
 
+func (UstringService) FindFriend(request pub.FriendShipRequest) (string, error) {
+	request.CreateAt = time.Now().String()
+	fmt.Println("FindFriend request:", request)
+	content, err := db.FindFriendShip(request.OwnerID, request.AddType)
+	if err != nil {
+		return "", err
+	} else {
+		return string(content), nil
+	}
+}
+
 func (UstringService) ModiFriend(request pub.FriendShipRequest) (string, error) {
-	/*
-		err, session := GetSession(request.Code)
-		if err != nil {
-			return err.Error(), http.StatusBadGateway
-		}
-		return session.Openid, http.StatusOK
-	*/
 	request.CreateAt = time.Now().String()
 	fmt.Println("ModiFriend request:", request)
-	db.ModifyFriendShipAddType(request.OwnerID, request.FriendID, request.AddType)
-	return "", nil
+	err := db.ModifyFriendShipAddType(request.OwnerID, request.FriendID, request.AddType)
+	return "", err
 }
 
 func (UstringService) DelFriend(request pub.FriendShipRequest) (string, error) {
@@ -57,8 +62,8 @@ func (UstringService) DelFriend(request pub.FriendShipRequest) (string, error) {
 	*/
 	request.CreateAt = time.Now().String()
 	fmt.Println("DelFriend request:", request)
-	db.DeleteFriendShip(request.OwnerID, request.FriendID)
-	return "", nil
+	err := db.DeleteFriendShip(request.OwnerID, request.FriendID)
+	return "", err
 }
 
 func (UstringService) AddFriend(request pub.FriendShipRequest) (string, error) {

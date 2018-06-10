@@ -1,6 +1,7 @@
 package db
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"ubolatu/pub"
@@ -8,8 +9,26 @@ import (
 
 type FriendShip pub.FriendShipRequest
 
+func FindFriendShip(OwnerOpenId string, AddType string) ([]byte, error) {
+	//rows, err := DB.Table("users").Where("name = ? or name = ?", user2.Name, user3.Name).Select("name, age").Rows()
+	rows, err := ormTiDB.Table("friend_ships").Where("owner_id = ? and add_type = ?", OwnerOpenId, AddType).Select("friend_id, friend_name").Rows()
+	if err != nil {
+		fmt.Printf("Not error should happen, got %v", err)
+		return []byte{}, err
+	}
+
+	var results []FriendShip
+	for rows.Next() {
+		var result FriendShip
+		if err := ormTiDB.ScanRows(rows, &result); err != nil {
+			fmt.Printf("should get no error, but got %v", err)
+		}
+		results = append(results, result)
+	}
+	return json.Marshal(results)
+}
+
 func ModifyFriendShipAddType(OwnerOpenId string, FriendOpenID string, AddType string) error {
-	fmt.Println("============ModifyFriendShipAddType==============")
 	err := ormTiDB.Model(FriendShip{}).Where(&FriendShip{OwnerID: OwnerOpenId, FriendID: FriendOpenID}).Update("AddType", AddType).Error
 	if err != nil {
 		fmt.Println("Unxpected error on conditional update err:", err)
