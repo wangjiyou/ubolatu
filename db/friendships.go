@@ -8,6 +8,11 @@ import (
 
 type FriendShip pub.FriendShipRequest
 
+func ModifyFriendShipAddType(OwnerOpenId string, FriendOpenID string, AddType string) error {
+
+	return nil
+}
+
 func DeleteFriendShip(OwnerOpenId string, FriendOpenID string) error {
 	err := ormTiDB.Where(FriendShip{OwnerID: OwnerOpenId, FriendID: FriendOpenID}).Delete(&FriendShip{}).Error
 	if err != nil {

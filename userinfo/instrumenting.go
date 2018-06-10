@@ -16,6 +16,17 @@ type UinstrumentingMiddleware struct {
 	Next           StringService
 }
 
+func (mw UinstrumentingMiddleware) DelFriend(s pub.FriendShipRequest) (output string, err error) {
+	defer func(begin time.Time) {
+		lvs := []string{"method", "delfriend", "error", fmt.Sprint(err != nil)}
+		mw.RequestCount.With(lvs...).Add(1)
+		mw.RequestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+	}(time.Now())
+	fmt.Println("instrument DelFriend")
+	output, err = mw.Next.DelFriend(s)
+	return
+}
+
 func (mw UinstrumentingMiddleware) AddFriend(s pub.FriendShipRequest) (output string, err error) {
 	defer func(begin time.Time) {
 		lvs := []string{"method", "addfriend", "error", fmt.Sprint(err != nil)}

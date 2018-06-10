@@ -97,9 +97,17 @@ func main() {
 		userinfo.UencodeResponse,
 	)
 
+	u_delFriendHandler := httptransport.NewServer(
+		userinfo.DelFriendEndpoint(u_svc),
+		userinfo.DelFriendRequest,
+		userinfo.UencodeResponse,
+	)
+
 	http.Handle("/onLogin", u_loginHandler)
 	http.Handle("/setUserInfo", u_setuserinfoHandler)
 	http.Handle("/addFriend", u_addFriendHandler)
+	http.Handle("/delFriend", u_delFriendHandler)
+	http.Handle("/modFriendType", u_addFriendHandler)
 
 	http.Handle("/metrics", promhttp.Handler())
 	logger.Log("msg", "HTTP", "addr", ":8080")

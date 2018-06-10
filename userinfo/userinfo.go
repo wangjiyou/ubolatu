@@ -27,9 +27,24 @@ type StringService interface {
 	Count(string) int
 	OnLogin(pub.LoginRequest) (string, int)
 	AddFriend(pub.FriendShipRequest) (string, error)
+	DelFriend(pub.FriendShipRequest) (string, error)
 }
 
 type UstringService struct{}
+
+func (UstringService) DelFriend(request pub.FriendShipRequest) (string, error) {
+	/*
+		err, session := GetSession(request.Code)
+		if err != nil {
+			return err.Error(), http.StatusBadGateway
+		}
+		return session.Openid, http.StatusOK
+	*/
+	request.CreateAt = time.Now().String()
+	fmt.Println("AddFriend request:", request)
+	db.DeleteFriendShip(request.OwnerID, request.FriendID)
+	return "", nil
+}
 
 func (UstringService) AddFriend(request pub.FriendShipRequest) (string, error) {
 	/*
