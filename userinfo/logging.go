@@ -13,6 +13,21 @@ type UloggingMiddleware struct {
 	Next   StringService
 }
 
+func (mw UloggingMiddleware) FindFans(s pub.FriendShipRequest) (output string, err error) {
+	defer func(begin time.Time) {
+		_ = mw.Logger.Log(
+			"method", "FindFans",
+			"input", s,
+			"output", output,
+			"err", err,
+			"took", time.Since(begin),
+		)
+	}(time.Now())
+
+	output, err = mw.Next.FindFans(s)
+	return
+}
+
 func (mw UloggingMiddleware) FindFriend(s pub.FriendShipRequest) (output string, err error) {
 	defer func(begin time.Time) {
 		_ = mw.Logger.Log(

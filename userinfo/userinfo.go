@@ -30,9 +30,21 @@ type StringService interface {
 	DelFriend(pub.FriendShipRequest) (string, error)
 	ModiFriend(pub.FriendShipRequest) (string, error)
 	FindFriend(pub.FriendShipRequest) (string, error)
+	FindFans(pub.FriendShipRequest) (string, error)
 }
 
 type UstringService struct{}
+
+func (UstringService) FindFans(request pub.FriendShipRequest) (string, error) {
+	request.CreateAt = time.Now().String()
+	fmt.Println("FindFans request:", request)
+	content, err := db.FindFansShip(request.FriendID, request.AddType)
+	if err != nil {
+		return "", err
+	} else {
+		return string(content), nil
+	}
+}
 
 func (UstringService) FindFriend(request pub.FriendShipRequest) (string, error) {
 	request.CreateAt = time.Now().String()

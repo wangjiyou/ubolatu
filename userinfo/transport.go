@@ -19,6 +19,26 @@ const (
 	TagAppSecret            = "df2a93e9e249ebc2a12f4841a6d503d7"
 )
 
+func FindFansEndpoint(svc StringService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(pub.FriendShipRequest)
+		content, err := svc.FindFans(req)
+		if err != nil {
+			return pub.UserResponse{err.Error(), 500}, nil
+		} else {
+			return pub.UserResponse{content, 200}, nil
+		}
+	}
+}
+
+func FindFansRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var request pub.FriendShipRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		return nil, err
+	}
+	return request, nil
+}
+
 func FindFriendEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(pub.FriendShipRequest)

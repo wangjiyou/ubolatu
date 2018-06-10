@@ -115,17 +115,22 @@ func main() {
 		userinfo.UencodeResponse,
 	)
 
+	u_findFansHandler := httptransport.NewServer(
+		userinfo.FindFansEndpoint(u_svc),
+		userinfo.FindFansRequest,
+		userinfo.UencodeResponse,
+	)
+
 	http.Handle("/onLogin", u_loginHandler)
 	http.Handle("/setUserInfo", u_setuserinfoHandler)
 	http.Handle("/addFriend", u_addFriendHandler)
 	http.Handle("/delFriend", u_delFriendHandler)
 	http.Handle("/modiFriendType", u_modiFriendHandler)
 	http.Handle("/findFriend", u_findFriendHandler)
-	http.Handle("/findFocus", u_modiFriendHandler)
-	http.Handle("/findFans", u_modiFriendHandler)
+	http.Handle("/findFocus", u_findFriendHandler)
+	http.Handle("/findFans", u_findFansHandler)
 
 	http.Handle("/metrics", promhttp.Handler())
 	logger.Log("msg", "HTTP", "addr", ":8080")
 	logger.Log("err", http.ListenAndServe(":8080", nil))
-
 }
