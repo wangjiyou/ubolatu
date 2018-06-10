@@ -103,11 +103,17 @@ func main() {
 		userinfo.UencodeResponse,
 	)
 
+	u_modiFriendHandler := httptransport.NewServer(
+		userinfo.ModiFriendEndpoint(u_svc),
+		userinfo.ModiFriendRequest,
+		userinfo.UencodeResponse,
+	)
+
 	http.Handle("/onLogin", u_loginHandler)
 	http.Handle("/setUserInfo", u_setuserinfoHandler)
 	http.Handle("/addFriend", u_addFriendHandler)
 	http.Handle("/delFriend", u_delFriendHandler)
-	http.Handle("/modFriendType", u_addFriendHandler)
+	http.Handle("/modiFriendType", u_modiFriendHandler)
 
 	http.Handle("/metrics", promhttp.Handler())
 	logger.Log("msg", "HTTP", "addr", ":8080")

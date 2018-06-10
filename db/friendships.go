@@ -9,6 +9,12 @@ import (
 type FriendShip pub.FriendShipRequest
 
 func ModifyFriendShipAddType(OwnerOpenId string, FriendOpenID string, AddType string) error {
+	fmt.Println("============ModifyFriendShipAddType==============")
+	err := ormTiDB.Model(FriendShip{}).Where(&FriendShip{OwnerID: OwnerOpenId, FriendID: FriendOpenID}).Update(AddType, AddType).Error
+	if err != nil {
+		fmt.Println("Unxpected error on conditional update err:", err)
+		return err
+	}
 
 	return nil
 }

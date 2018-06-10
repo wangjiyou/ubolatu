@@ -19,6 +19,23 @@ const (
 	TagAppSecret            = "df2a93e9e249ebc2a12f4841a6d503d7"
 )
 
+func ModiFriendEndpoint(svc StringService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(pub.FriendShipRequest)
+		/*openid, code :=*/ svc.ModiFriend(req)
+		//fmt.Println("AddFriendEndpoint openid:", openid, " code:", code)
+		return pub.UserResponse{"", 200}, nil
+	}
+}
+
+func ModiFriendRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var request pub.FriendShipRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		return nil, err
+	}
+	return request, nil
+}
+
 func DelFriendEndpoint(svc StringService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(pub.FriendShipRequest)
