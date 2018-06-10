@@ -39,6 +39,7 @@ func (UstringService) AddFriend(request pub.FriendShipRequest) (string, error) {
 		}
 		return session.Openid, http.StatusOK
 	*/
+	request.CreateAt = time.Now().String()
 	fmt.Println("AddFriend request:", request)
 	db.SetFriendShip(request)
 	return "", nil
